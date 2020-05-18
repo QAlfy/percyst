@@ -95,23 +95,27 @@ export class Percyst {
 
     const restored = cond([
       [
+        // if there is a persisted state and encryption is disabled
         allPass([
           pipe(prop('p'), is(String)),
           pipe(prop('k'), isNil)
         ]), compose(deserialize, prop('p'))
       ],
       [
+        // if there is a persisted state and encryption is enabled
         allPass([
           pipe(prop('p'), complement(isNil)),
           pipe(prop('k'), complement(isNil)),
         ]), unencrypted
       ],
       [
+        // if there is no persisted state and encryption is disabled
         allPass([
           pipe(prop('p'), isNil),
           pipe(prop('k'), isNil),
         ]), always({})
       ],
+      // for any other case
       [T, always({})]
     ])({
       p: persisted,
