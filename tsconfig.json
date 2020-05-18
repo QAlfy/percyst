@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noResolve": false,
+    "outDir": "./dist/",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2015",
+    "types": ["jest"]
+  },
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*"],
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "docs"
+  },
+  "typingOptions": {
+    "enableAutoDiscovery": true
+  }
+}

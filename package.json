@@ -1,0 +1,64 @@
+{
+  "author": "Nicolas Iglesias",
+  "bugs": {
+    "url": "https://github.com/QAlfy/percyst/issues"
+  },
+  "dependencies": {
+    "ramda": "^0.27.0",
+    "simple-crypto-js": "^3.0.0"
+  },
+  "description": "An unopinionated Redux store persistor which works out of the box",
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.9.0",
+    "jest": "^26.0.1",
+    "redux": "^4.0.5",
+    "redux-mock-store": "^1.5.4",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.5.0",
+    "tslint": "^6.1.2",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=9.3.0",
+    "npm": ">=5.8.0"
+  },
+  "homepage": "https://github.com/QAlfy/percyst#readme",
+  "jest": {
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
+    ],
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ]
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "percyst",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QAlfy/percyst.git"
+  },
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "clean": "rimraf dist/",
+    "dev": "tsc --build tsconfig.json --watch ",
+    "lint": "npm run lint.eslint && npm run lint.types",
+    "lint.eslint": "eslint src/**/* --ext ts",
+    "lint.types": "tsc --noEmit",
+    "postversion": "git push && git push --tags",
+    "prepare": "npm run build",
+    "prepublish": "npm run clean && npm run lint",
+    "test": "jest src/",
+    "test:coverage": "npm test -- --coverage",
+    "test:dev": "jest src/ --watch"
+  },
+  "types": "dist/index.d.ts",
+  "version": "0.1.0"
+}

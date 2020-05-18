@@ -1,0 +1,27 @@
+{
+  "env": {
+    "jest/globals": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "globals": {
+    "window": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["jest"],
+  "rules": {
+    "max-len": [
+      2,
+      {
+        "code": 80,
+        "ignoreUrls": true
+      }
+    ],
+    "newline-per-chained-call": 2,
+    "no-multiple-empty-lines": 2
+  }
+}
