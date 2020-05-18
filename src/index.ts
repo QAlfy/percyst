@@ -122,11 +122,6 @@ export class Percyst {
       k: this.options.encryptSecret
     });
 
-    return ifElse(isNil,
-      always(initialState),
-      always(
-        mergeAll([initialState, restored])
-      )
-    )(persisted);
+    return mergeAll([initialState, restored]);
   }
 }

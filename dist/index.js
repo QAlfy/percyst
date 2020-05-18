@@ -57,29 +57,33 @@ class Percyst {
         ]);
         const restored = ramda_1.cond([
             [
+                // if there is a persisted state and encryption is disabled
                 ramda_1.allPass([
                     ramda_1.pipe(ramda_1.prop('p'), ramda_1.is(String)),
                     ramda_1.pipe(ramda_1.prop('k'), ramda_1.isNil)
                 ]), ramda_1.compose(exports.deserialize, ramda_1.prop('p'))
             ],
             [
+                // if there is a persisted state and encryption is enabled
                 ramda_1.allPass([
                     ramda_1.pipe(ramda_1.prop('p'), ramda_1.complement(ramda_1.isNil)),
                     ramda_1.pipe(ramda_1.prop('k'), ramda_1.complement(ramda_1.isNil)),
                 ]), unencrypted
             ],
             [
+                // if there is no persisted state and encryption is disabled
                 ramda_1.allPass([
                     ramda_1.pipe(ramda_1.prop('p'), ramda_1.isNil),
                     ramda_1.pipe(ramda_1.prop('k'), ramda_1.isNil),
                 ]), ramda_1.always({})
             ],
+            // for any other case
             [ramda_1.T, ramda_1.always({})]
         ])({
             p: persisted,
             k: this.options.encryptSecret
         });
-        return ramda_1.ifElse(ramda_1.isNil, ramda_1.always(initialState), ramda_1.always(ramda_1.mergeAll([initialState, restored])))(persisted);
+        return ramda_1.mergeAll([initialState, restored]);
     }
 }
 exports.Percyst = Percyst;
