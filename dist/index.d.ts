@@ -12,6 +12,9 @@ export declare type PercystOptions = {
     */
     encryptSecret?: string;
 };
+/**
+ * Percyst: an unopinionated Redux store persistor with optional encryption.
+ */
 export declare class Percyst {
     private options;
     constructor(options?: PercystOptions);
@@ -29,7 +32,7 @@ export declare class Percyst {
      * To be used with Redux's createStore (preloadedState).
      *
      * @param  {} initialState={}
-     * @returns void
+     * @returns any
      */
-    rehydrate(initialState?: {}): void;
+    rehydrate(initialState?: any): any;
 }

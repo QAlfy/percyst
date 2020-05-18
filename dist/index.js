@@ -18,6 +18,9 @@ exports.decrypt = ramda_1.converge(ramda_1.call, [
     ramda_1.pipe(ramda_1.nthArg(0), ramda_1.invoker(1, 'decrypt')),
     ramda_1.pipe(ramda_1.nthArg(1), ramda_1.construct(simple_crypto_js_1.default))
 ]);
+/**
+ * Percyst: an unopinionated Redux store persistor with optional encryption.
+ */
 class Percyst {
     constructor(options = {}) {
         this.options = options;
@@ -45,15 +48,38 @@ class Percyst {
      * To be used with Redux's createStore (preloadedState).
      *
      * @param  {} initialState={}
-     * @returns void
+     * @returns any
      */
     rehydrate(initialState = {}) {
         const persisted = exports.localStorage.getItem(exports.LOCAL_STORAGE_KEY);
         const unencrypted = ramda_1.partial(exports.decrypt, [
             persisted, this.options.encryptSecret
         ]);
-        const deserialized = ramda_1.ifElse(ramda_1.is(String), unencrypted, ramda_1.partial(exports.deserialize, [persisted]))(this.options.encryptSecret);
-        return ramda_1.ifElse(ramda_1.isNil, ramda_1.always(initialState), ramda_1.always(ramda_1.mergeAll([initialState, deserialized])))(persisted);
+        const restored = ramda_1.cond([
+            [
+                ramda_1.allPass([
+                    ramda_1.pipe(ramda_1.prop('p'), ramda_1.is(String)),
+                    ramda_1.pipe(ramda_1.prop('k'), ramda_1.isNil)
+                ]), ramda_1.compose(exports.deserialize, ramda_1.prop('p'))
+            ],
+            [
+                ramda_1.allPass([
+                    ramda_1.pipe(ramda_1.prop('p'), ramda_1.complement(ramda_1.isNil)),
+                    ramda_1.pipe(ramda_1.prop('k'), ramda_1.complement(ramda_1.isNil)),
+                ]), unencrypted
+            ],
+            [
+                ramda_1.allPass([
+                    ramda_1.pipe(ramda_1.prop('p'), ramda_1.isNil),
+                    ramda_1.pipe(ramda_1.prop('k'), ramda_1.isNil),
+                ]), ramda_1.always({})
+            ],
+            [ramda_1.T, ramda_1.always({})]
+        ])({
+            p: persisted,
+            k: this.options.encryptSecret
+        });
+        return ramda_1.ifElse(ramda_1.isNil, ramda_1.always(initialState), ramda_1.always(ramda_1.mergeAll([initialState, restored])))(persisted);
     }
 }
 exports.Percyst = Percyst;

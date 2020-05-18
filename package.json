@@ -7,7 +7,7 @@
     "ramda": "^0.27.0",
     "simple-crypto-js": "^3.0.0"
   },
-  "description": "An unopinionated Redux store persistor which works out of the box",
+  "description": "An unopinionated Redux store persistor with optional encryption which works out of the box",
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^2.30.0",

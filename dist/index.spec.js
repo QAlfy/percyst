@@ -45,6 +45,7 @@ describe('Redux store without encryption', () => {
     });
     // initialize mockstore with pseudo reducer
     beforeAll(() => {
+        index_1.localStorage.clear();
         const middlewares = [percyst.middleware];
         store = mockStore(middlewares)(mockedReducer);
     });
@@ -79,6 +80,7 @@ describe('Redux store with encryption', () => {
     });
     // initialize mockstore with pseudo reducer
     beforeAll(() => {
+        index_1.localStorage.clear();
         const middlewares = [percyst.middleware];
         store = mockStore(middlewares)(mockedReducer);
     });
@@ -99,6 +101,11 @@ describe('Redux store with encryption', () => {
     test('rehydration should restore encrypted state and merge with initial state', () => {
         const rehydrated = percyst.rehydrate({ initial: 'initial key/value' });
         expect(rehydrated).toHaveProperty('todo');
+        expect(rehydrated).toHaveProperty('initial');
+    });
+    test('rehydration with encryption should work on null state', () => {
+        index_1.localStorage.clear();
+        const rehydrated = percyst.rehydrate({ initial: 'initial key/value' });
         expect(rehydrated).toHaveProperty('initial');
     });
 });

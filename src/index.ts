@@ -1,7 +1,11 @@
 import SimpleCrypto from 'simple-crypto-js';
 import {
+  allPass,
   always,
   call,
+  complement,
+  compose,
+  cond,
   construct,
   converge,
   curryN,
@@ -14,7 +18,9 @@ import {
   nthArg,
   omit,
   partial,
-  pipe
+  pipe,
+  prop,
+  T
 } from 'ramda';
 
 export const LOCAL_STORAGE_KEY = '___percyst';
@@ -41,6 +47,9 @@ export type PercystOptions = {
   encryptSecret?: string;
 };
 
+/**
+ * Percyst: an unopinionated Redux store persistor with optional encryption.
+ */
 export class Percyst {
   constructor(private options: PercystOptions = {}) { }
 
@@ -76,24 +85,43 @@ export class Percyst {
    * To be used with Redux's createStore (preloadedState).
    *
    * @param  {} initialState={}
-   * @returns void
+   * @returns any
    */
-  rehydrate(initialState = {}): void {
+  rehydrate(initialState: any = {}): any {
     const persisted = localStorage.getItem(LOCAL_STORAGE_KEY);
     const unencrypted = partial(decrypt, [
       persisted, this.options.encryptSecret
     ]);
-    const deserialized = ifElse(is(String),
-      unencrypted,
-      partial(deserialize, [persisted])
-    )(
-      this.options.encryptSecret
-    );
+
+    const restored = cond([
+      [
+        allPass([
+          pipe(prop('p'), is(String)),
+          pipe(prop('k'), isNil)
+        ]), compose(deserialize, prop('p'))
+      ],
+      [
+        allPass([
+          pipe(prop('p'), complement(isNil)),
+          pipe(prop('k'), complement(isNil)),
+        ]), unencrypted
+      ],
+      [
+        allPass([
+          pipe(prop('p'), isNil),
+          pipe(prop('k'), isNil),
+        ]), always({})
+      ],
+      [T, always({})]
+    ])({
+      p: persisted,
+      k: this.options.encryptSecret
+    });
 
     return ifElse(isNil,
       always(initialState),
       always(
-        mergeAll([initialState, deserialized])
+        mergeAll([initialState, restored])
       )
     )(persisted);
   }
