@@ -98,7 +98,8 @@ describe('Redux store with encryption', () => {
         expect(deserializedState).toHaveProperty('todo');
         expect(deserializedState['todo']).toEqual('This is some NEW bogus payload');
     });
-    test('rehydration should restore encrypted state and merge with initial state', () => {
+    test('rehydration should restore encrypted state and merge with \
+  initial state', () => {
         const rehydrated = percyst.rehydrate({ initial: 'initial key/value' });
         expect(rehydrated).toHaveProperty('todo');
         expect(rehydrated).toHaveProperty('initial');

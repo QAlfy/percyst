@@ -8,7 +8,7 @@ export declare type PercystOptions = {
     ignore?: Array<string>;
     /**
     When defined, Percyst will encrypt the state using this option
-    as the encryption key.
+    as the encryption key. AES cryptography is used.
     */
     encryptSecret?: string;
 };

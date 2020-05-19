@@ -142,7 +142,8 @@ describe('Redux store with encryption', () => {
     )
   });
 
-  test('rehydration should restore encrypted state and merge with initial state',
+  test('rehydration should restore encrypted state and merge with \
+  initial state',
     () => {
       const rehydrated = percyst.rehydrate({ initial: 'initial key/value' });
 
