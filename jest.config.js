@@ -5,4 +5,5 @@ module.exports = {
     ".(ts|tsx)": "ts-jest",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
+  coverageDirectory: "coverage",
 };
