@@ -44,7 +44,7 @@ A quick overview of my current `configureStore.js` file:
 ```js
 import { applyMiddleware, createStore } from "redux";
 import { rootReducer } from "../reducers";
-import { Percyst } from "/home/nico/dev/projects/percyst/dist";
+import { Percyst } from "percyst";
 
 const percyst = new Percyst();
 
