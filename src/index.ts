@@ -149,8 +149,7 @@ export class Percyst {
       [T, always({})]
     ])({
       p: persisted,
-      k: this.options.encryptSecret,
-      t: this.options.ttl
+      k: this.options.encryptSecret
     });
 
     return mergeAll([initialState, restored]);

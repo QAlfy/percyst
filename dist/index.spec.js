@@ -156,7 +156,6 @@ describe('Redux store with TTL', () => {
         expect(actions).toEqual([addTodo()]);
     });
     test('stored state expires if ttl is exceeded', () => __awaiter(void 0, void 0, void 0, function* () {
-        const firstHitDate = new Date(Number(index_1.localStorage[index_1.LOCAL_STORAGE_TTL_KEY]));
         // travel to the future
         date.set((new Date()).setMilliseconds(ttl * 1.5));
         const rehydrated = percyst.rehydrate();
