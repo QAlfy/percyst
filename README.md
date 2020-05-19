@@ -1,7 +1,7 @@
 <h1 align="center">Percyst</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.1.1-blue.svg?cacheSeconds=2592000" />
-  <img alt="Documentation" src="https://img.shields.io/badge/coverage-100-brightgreen.svg" />
+  <img alt="Documentation" src="https://img.shields.io/badge/Coverage-100%25-brightgreen.svg" />
   <a href="Copyright <YEAR> <COPYRIGHT HOLDER>" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
