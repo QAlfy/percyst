@@ -1,3 +1,4 @@
+import * as date from 'mockdate';
 import configureStore from 'redux-mock-store';
 import { curryN } from 'ramda';
 import {
@@ -5,6 +6,7 @@ import {
   deserialize,
   encrypt,
   LOCAL_STORAGE_KEY,
+  LOCAL_STORAGE_TTL_KEY,
   localStorage,
   Percyst,
   serialize
@@ -161,4 +163,38 @@ describe('Redux store with encryption', () => {
       expect(rehydrated).toHaveProperty('initial');
     }
   );
+});
+
+describe('Redux store with TTL', () => {
+  const ttl = 2000; // 2 seconds
+  const percyst = new Percyst({ ttl });
+
+  // initialize mockstore with pseudo reducer
+  beforeAll(() => {
+    date.reset();
+
+    localStorage.clear();
+
+    const middlewares = [percyst.middleware];
+
+    store = mockStore(middlewares)(mockedReducer);
+  });
+
+  test('it can dispatch an action', () => {
+    // dispatch the action
+    store.dispatch(addTodo());
+
+    const actions = store.getActions();
+
+    expect(actions).toEqual([addTodo()]);
+  });
+
+  test('stored state expires if ttl is exceeded', async () => {
+    // travel to the future
+    date.set((new Date()).setMilliseconds(ttl * 1.5));
+
+    const rehydrated = percyst.rehydrate();
+
+    expect(rehydrated).toEqual({});
+  });
 });

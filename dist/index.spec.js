@@ -1,8 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const date = __importStar(require("mockdate"));
 const redux_mock_store_1 = __importDefault(require("redux-mock-store"));
 const ramda_1 = require("ramda");
 const index_1 = require("./index");
@@ -109,5 +138,29 @@ describe('Redux store with encryption', () => {
         const rehydrated = percyst.rehydrate({ initial: 'initial key/value' });
         expect(rehydrated).toHaveProperty('initial');
     });
+});
+describe('Redux store with TTL', () => {
+    const ttl = 2000; // 2 seconds
+    const percyst = new index_1.Percyst({ ttl });
+    // initialize mockstore with pseudo reducer
+    beforeAll(() => {
+        date.reset();
+        index_1.localStorage.clear();
+        const middlewares = [percyst.middleware];
+        store = mockStore(middlewares)(mockedReducer);
+    });
+    test('it can dispatch an action', () => {
+        // dispatch the action
+        store.dispatch(addTodo());
+        const actions = store.getActions();
+        expect(actions).toEqual([addTodo()]);
+    });
+    test('stored state expires if ttl is exceeded', () => __awaiter(void 0, void 0, void 0, function* () {
+        const firstHitDate = new Date(Number(index_1.localStorage[index_1.LOCAL_STORAGE_TTL_KEY]));
+        // travel to the future
+        date.set((new Date()).setMilliseconds(ttl * 1.5));
+        const rehydrated = percyst.rehydrate();
+        expect(rehydrated).toEqual({});
+    }));
 });
 //# sourceMappingURL=index.spec.js.map

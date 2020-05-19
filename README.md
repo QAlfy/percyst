@@ -61,7 +61,7 @@ After instantiating the `Percyst` object, inject the middleware using the corres
 
 ### Options
 
-Just in case, you can enable encryption or ignore some pieces of your state. Use these options using the `Percyst` constructor:
+Just in case, you can enable encryption, ignore some pieces of your state or if you just want to reset the state after a certain period (e.g. destroy session and logout a user). Use these options using the `Percyst` constructor:
 
 ```js
 const percyst = new Percyst({
@@ -74,6 +74,7 @@ const percyst = new Percyst({
 | --------------- | -------- | ----------------------------------------------------- | :------: |
 | `ignore`        | _Array_  | A list of keys that will not be saved                 |  **No**  |
 | `encryptSecret` | _String_ | Enables encryption of the state using this passphrase |  **No**  |
+| `ttl` | _Number_ | Time to live in milliseconds. The amount of time the state can persist in the storage. |  **No**  |
 
 
 ## Author
