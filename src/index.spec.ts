@@ -197,4 +197,12 @@ describe('Redux store with TTL', () => {
 
     expect(rehydrated).toEqual({});
   });
+
+  test('stored state does not expires if ttl is not exceeded', async () => {
+    date.reset();
+
+    const rehydrated = percyst.rehydrate();
+
+    expect(rehydrated).not.toEqual({});
+  });
 });
