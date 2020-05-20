@@ -5,8 +5,8 @@ import {
   decrypt,
   deserialize,
   encrypt,
+  futureDate,
   LOCAL_STORAGE_KEY,
-  LOCAL_STORAGE_TTL_KEY,
   localStorage,
   Percyst,
   serialize
@@ -190,19 +190,23 @@ describe('Redux store with TTL', () => {
   });
 
   test('stored state expires if ttl is exceeded', async () => {
-    // travel to the future
-    date.set((new Date()).setMilliseconds(ttl * 1.5));
+    // travel to the future ahead of TTL
+    date.set(futureDate(ttl * 1.5, new Date()));
 
     const rehydrated = percyst.rehydrate();
 
     expect(rehydrated).toEqual({});
+    date.reset();
   });
 
-  test('stored state does not expires if ttl is not exceeded', async () => {
-    date.reset();
+  test('stored state does not expire if ttl is not exceeded', async () => {
+    // travel to the future, just a bit this time
+    date.set(futureDate(500, new Date()));
 
     const rehydrated = percyst.rehydrate();
 
     expect(rehydrated).not.toEqual({});
+
+    date.reset();
   });
 });
