@@ -156,10 +156,18 @@ describe('Redux store with TTL', () => {
         expect(actions).toEqual([addTodo()]);
     });
     test('stored state expires if ttl is exceeded', () => __awaiter(void 0, void 0, void 0, function* () {
-        // travel to the future
-        date.set((new Date()).setMilliseconds(ttl * 1.5));
+        // travel to the future ahead of TTL
+        date.set(index_1.futureDate(ttl * 1.5, new Date()));
         const rehydrated = percyst.rehydrate();
         expect(rehydrated).toEqual({});
+        date.reset();
+    }));
+    test('stored state does not expire if ttl is not exceeded', () => __awaiter(void 0, void 0, void 0, function* () {
+        // travel to the future, just a bit this time
+        date.set(index_1.futureDate(500, new Date()));
+        const rehydrated = percyst.rehydrate();
+        expect(rehydrated).not.toEqual({});
+        date.reset();
     }));
 });
 //# sourceMappingURL=index.spec.js.map

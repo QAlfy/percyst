@@ -9,6 +9,7 @@ const ramda_1 = require("ramda");
 exports.LOCAL_STORAGE_KEY = '___percyst';
 exports.LOCAL_STORAGE_TTL_KEY = '___percyst_ttl';
 exports.localStorage = window.localStorage;
+// some utilities
 exports.futureDate = ramda_1.compose(ramda_1.constructN(1, Date), ramda_1.invoker(1, 'setMilliseconds'));
 exports.serialize = ramda_1.curryN(1, JSON.stringify);
 exports.deserialize = ramda_1.curryN(1, JSON.parse);
@@ -68,6 +69,10 @@ class Percyst {
             ramda_1.always(ramda_1.call(isDefined, timestamp)),
             ramda_1.always(ramda_1.lt(exports.futureDate(this.options.ttl, new Date(Number(timestamp))), new Date()))
         ]);
+        // refresh timestamp if expired
+        if (hasExpired()) {
+            exports.localStorage.setItem(exports.LOCAL_STORAGE_TTL_KEY, String(Date.now()));
+        }
         const restored = ramda_1.cond([
             [
                 // if there is a persisted state and encryption is disabled
@@ -97,8 +102,7 @@ class Percyst {
             [ramda_1.T, ramda_1.always({})]
         ])({
             p: persisted,
-            k: this.options.encryptSecret,
-            t: this.options.ttl
+            k: this.options.encryptSecret
         });
         return ramda_1.mergeAll([initialState, restored]);
     }

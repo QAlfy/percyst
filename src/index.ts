@@ -121,6 +121,11 @@ export class Percyst {
       ))
     ]);
 
+    // refresh timestamp if expired
+    if (hasExpired()) {
+      localStorage.setItem(LOCAL_STORAGE_TTL_KEY, String(Date.now()));
+    }
+
     const restored = cond([
       [
         // if there is a persisted state and encryption is disabled
