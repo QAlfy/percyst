@@ -29,6 +29,7 @@ export const LOCAL_STORAGE_KEY = '___percyst';
 export const LOCAL_STORAGE_TTL_KEY = '___percyst_ttl';
 export const localStorage = window.localStorage;
 
+// some utilities
 export const futureDate = compose(
   constructN(1, Date), invoker(1, 'setMilliseconds')
 );
